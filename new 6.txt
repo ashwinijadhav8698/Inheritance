@@ -1,0 +1,1211 @@
+Q12. Create a class Employee with:
+Fields: id, name, basicSalary, isPermanent
+Parameterized constructor to initialize fields.
+Write methods:
+calculateNetSalary() →
+if permanent → HRA = 20%, DA = 10%, PF = 12%
+if temporary → HRA = 10%, DA = 5%, PF = 0
+compareSalary(Employee e) → return higher salary employee name.
+Task Logic:
+ Create 3 Employee objects.
+ Compare each pair using logic (nested comparison).
+Expected Learning: Complex if-else + constructor initialization + inter-object comparison.
+
+class Employee {
+    int id;
+    String name;
+    double basicSalary;
+    boolean isPermanent;
+
+    Employee(int id, String name, double basicSalary, boolean isPermanent) {
+        this.id = id;
+        this.name = name;
+        this.basicSalary = basicSalary;
+        this.isPermanent = isPermanent;
+    }
+
+    double calculateNetSalary() {
+        double hra, da, pf;
+
+        if (isPermanent) {
+            hra = 0.20 * basicSalary;
+            da = 0.10 * basicSalary;
+            pf = 0.12 * basicSalary;
+        } else {
+            hra = 0.10 * basicSalary;
+            da = 0.05 * basicSalary;
+            pf = 0;
+        }
+
+        return basicSalary + hra + da - pf;
+    }
+
+    String compareSalary(Employee e) {
+        return (this.calculateNetSalary() > e.calculateNetSalary()) ? this.name : e.name;
+    }
+}
+
+public class Q12Main {
+    public static void main(String[] args) {
+        Employee e1 = new Employee(1, "Arati", 30000, true);
+        Employee e2 = new Employee(2, "Rohan", 25000, false);
+        Employee e3 = new Employee(3, "Neha", 28000, true);
+
+        System.out.println("Higher between e1 & e2: " + e1.compareSalary(e2));
+        System.out.println("Higher between e2 & e3: " + e2.compareSalary(e3));
+        System.out.println("Higher between e1 & e3: " + e1.compareSalary(e3));
+    }
+}
+
+
+
+Q13. Create a BankAccount class with:
+accountNumber, holderName, balance, lastTransactionAmount
+
+
+Parameterized constructor.
+Logic Method: isFraudAlert()
+ Return true when ANY condition matches:
+lastTransactionAmount > 50% of balance
+lastTransactionAmount > 50000
+More than 3 transactions above ₹10,000 in a row (use an int counter passed to constructor)
+balance suddenly dropped by more than 40% (use previousBalance passed to constructor)
+Task:
+ Create objects with different values.
+ Check fraud alert result.
+Expected Learning: Complex logical combinations (&&, ||), constructor usage, real-world reasoning.
+
+
+class BankAccount {
+    int accountNumber;
+    String holderName;
+    double balance;
+    double lastTransactionAmount;
+    int highValueCount;
+    double previousBalance;
+
+    BankAccount(int accountNumber, String holderName, double balance,
+                double lastTransactionAmount, int highValueCount, double previousBalance) {
+
+        this.accountNumber = accountNumber;
+        this.holderName = holderName;
+        this.balance = balance;
+        this.lastTransactionAmount = lastTransactionAmount;
+        this.highValueCount = highValueCount;
+        this.previousBalance = previousBalance;
+    }
+
+    boolean isFraudAlert() {
+        if (lastTransactionAmount > 0.5 * balance) return true;
+        if (lastTransactionAmount > 50000) return true;
+        if (highValueCount > 3) return true;
+        if ((previousBalance - balance) > 0.40 * previousBalance) return true;
+
+        return false;
+    }
+}
+
+public class Q13Main {
+    public static void main(String[] args) {
+        BankAccount b1 = new BankAccount(101, "Arati", 90000, 60000, 1, 95000);
+        BankAccount b2 = new BankAccount(102, "Rohan", 50000, 8000, 4, 70000);
+        BankAccount b3 = new BankAccount(103, "Neha", 40000, 10000, 1, 80000);
+
+        System.out.println(b1.holderName + " Fraud? " + b1.isFraudAlert());
+        System.out.println(b2.holderName + " Fraud? " + b2.isFraudAlert());
+        System.out.println(b3.holderName + " Fraud? " + b3.isFraudAlert());
+    }
+}
+
+
+Q14. Create a class LoanApplicant with:
+Fields: name, age, annualIncome, creditScore, existingLoans
+Constructor: Initialize all fields.
+Logic Method: isEligible()
+ Return true only if all the following conditions match:
+age between 21 and 55
+annualIncome ≥ 3,50,000
+creditScore ≥ 700
+existingLoans < 3
+If creditScore is between 650–699 → income must be ≥ 5,00,000
+If existingLoans = 2 → creditScore must be ≥ 750
+Task:
+ Create 3 applicants and check eligibility for each.
+Focus: Compound conditions + nested logic + constructor handling.
+
+class LoanApplicant {
+    String name;
+    int age;
+    double annualIncome;
+    int creditScore;
+    int existingLoans;
+
+    LoanApplicant(String name, int age, double annualIncome, int creditScore, int existingLoans) {
+        this.name = name;
+        this.age = age;
+        this.annualIncome = annualIncome;
+        this.creditScore = creditScore;
+        this.existingLoans = existingLoans;
+    }
+
+    boolean isEligible() {
+        if (!(age >= 21 && age <= 55)) return false;
+        if (annualIncome < 350000) return false;
+        if (creditScore < 700) return false;
+        if (existingLoans >= 3) return false;
+
+        if (creditScore >= 650 && creditScore <= 699 && annualIncome < 500000)
+            return false;
+
+        if (existingLoans == 2 && creditScore < 750)
+            return false;
+
+        return true;
+    }
+}
+
+public class Q14Main {
+    public static void main(String[] args) {
+        LoanApplicant a1 = new LoanApplicant("Arati", 30, 600000, 720, 1);
+        LoanApplicant a2 = new LoanApplicant("Rohan", 40, 300000, 680, 0);
+        LoanApplicant a3 = new LoanApplicant("Neha", 50, 800000, 760, 2);
+
+        System.out.println(a1.name + " Eligible? " + a1.isEligible());
+        System.out.println(a2.name + " Eligible? " + a2.isEligible());
+        System.out.println(a3.name + " Eligible? " + a3.isEligible());
+    }
+}
+
+
+Q15. Create a class Vehicle with:
+Fields: regNo, vehicleType, emissionLevel, fuelType, lastServiceKm
+Constructor: Assign all fields.
+
+
+Logic Method: needsEmissionTest()
+ Return true when ANY condition is true:
+emissionLevel > 75
+vehicleType = “Diesel” AND emissionLevel > 60
+fuelType = “Petrol” AND lastServiceKm > 5000
+vehicleType = “Electric” → ALWAYS return false
+(extra condition) If emissionLevel between 55–75 AND service > 8000 → return true
+
+
+Task:
+ Create multiple Vehicle objects and test emission status.
+Focus: Logical combinations (AND, OR) + constructor initialization + exclusion case.
+
+class LoanApplicant {
+    String name;
+    int age;
+    double annualIncome;
+    int creditScore;
+    int existingLoans;
+
+    LoanApplicant(String name, int age, double annualIncome, int creditScore, int existingLoans) {
+        this.name = name;
+        this.age = age;
+        this.annualIncome = annualIncome;
+        this.creditScore = creditScore;
+        this.existingLoans = existingLoans;
+    }
+
+    boolean isEligible() {
+        if (!(age >= 21 && age <= 55)) return false;
+        if (annualIncome < 350000) return false;
+        if (creditScore < 700) return false;
+        if (existingLoans >= 3) return false;
+
+        if (creditScore >= 650 && creditScore <= 699 && annualIncome < 500000)
+            return false;
+
+        if (existingLoans == 2 && creditScore < 750)
+            return false;
+
+        return true;
+    }
+}
+
+public class Q14Main {
+    public static void main(String[] args) {
+        LoanApplicant a1 = new LoanApplicant("Arati", 30, 600000, 720, 1);
+        LoanApplicant a2 = new LoanApplicant("Rohan", 40, 300000, 680, 0);
+        LoanApplicant a3 = new LoanApplicant("Neha", 50, 800000, 760, 2);
+
+        System.out.println(a1.name + " Eligible? " + a1.isEligible());
+        System.out.println(a2.name + " Eligible? " + a2.isEligible());
+        System.out.println(a3.name + " Eligible? " + a3.isEligible());
+    }
+}
+
+
+Q16. Create an Employee class with a constructor to initialize:
+empId
+empName
+basicSalary
+department
+
+
+Menu options:
+Add employee
+Calculate Net Salary using formula:
+HRA = 20%
+DA = 15%
+PF = 12% deduction
+Bonus (apply logic):
+IT dept → 10%
+HR dept → 7%
+Others → 5%
+Display employees
+Display highest net salary employee
+Salary calculation requires multiple percentage + logical checks.
+Use department comparison to select bonus.
+Find maximum salary (logical loop).
+Implement complete menu using constructor data only.
+
+import java.util.*;
+
+class Employee {
+    int empId;
+    String empName;
+    double basicSalary;
+    String department;
+
+    Employee(int empId, String empName, double basicSalary, String department) {
+        this.empId = empId;
+        this.empName = empName;
+        this.basicSalary = basicSalary;
+        this.department = department;
+    }
+
+    double calculateNetSalary() {
+        double hra = 0.20 * basicSalary;
+        double da = 0.15 * basicSalary;
+        double pf = 0.12 * basicSalary;
+
+        double bonus;
+        if (department.equalsIgnoreCase("IT"))
+            bonus = 0.10 * basicSalary;
+        else if (department.equalsIgnoreCase("HR"))
+            bonus = 0.07 * basicSalary;
+        else
+            bonus = 0.05 * basicSalary;
+
+        return basicSalary + hra + da + bonus - pf;
+    }
+
+    void show() {
+        System.out.println(empId + "  " + empName + "  " + department + "  Net Salary: " + calculateNetSalary());
+    }
+}
+
+public class Q16Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Employee emp[] = new Employee[10];
+        int count = 0;
+
+        while (true) {
+            System.out.println("\n1. Add Employee");
+            System.out.println("2. Display Employees");
+            System.out.println("3. Highest Net Salary");
+            System.out.println("4. Exit");
+            System.out.print("Enter choice: ");
+            int ch = sc.nextInt();
+
+            if (ch == 1) {
+                System.out.print("ID: ");
+                int id = sc.nextInt();
+                System.out.print("Name: ");
+                String name = sc.next();
+                System.out.print("Basic Salary: ");
+                double sal = sc.nextDouble();
+                System.out.print("Department: ");
+                String dept = sc.next();
+
+                emp[count++] = new Employee(id, name, sal, dept);
+            }
+            else if (ch == 2) {
+                for (int i = 0; i < count; i++)
+                    emp[i].show();
+            }
+            else if (ch == 3) {
+                double max = 0;
+                Employee top = null;
+
+                for (int i = 0; i < count; i++) {
+                    double net = emp[i].calculateNetSalary();
+                    if (net > max) {
+                        max = net;
+                        top = emp[i];
+                    }
+                }
+
+                System.out.println("Highest Salary Employee:");
+                top.show();
+            }
+            else if (ch == 4) {
+                break;
+            }
+        }
+    }
+}
+
+
+Q17. Create a Product class with constructor arguments:
+productId
+name
+price
+quantity
+
+Menu functions:
+Add product
+Update stock quantity
+Sort products according to price (high → low)
+Show “Low Stock Products” (quantity < 5)
+Generate bill when a customer buys items
+Exit
+Sorting must be done manually using loops (Bubble/Selection sort).
+Billing must reduce quantity and calculate total amount.
+Use logical operators to check:
+ if(quantity > 0 && buyQty <= quantity)
+Prevent negative stock using logical condition.
+
+
+import java.util.*;
+
+class Product {
+    int productId;
+    String name;
+    double price;
+    int quantity;
+
+    Product(int productId, String name, double price, int quantity) {
+        this.productId = productId;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    void show() {
+        System.out.println(productId + "  " + name + "  Price: " + price + "  Qty: " + quantity);
+    }
+}
+
+public class Q17Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Product p[] = new Product[20];
+        int count = 0;
+
+        while (true) {
+            System.out.println("\n1. Add Product");
+            System.out.println("2. Update Stock");
+            System.out.println("3. Sort by Price (High → Low)");
+            System.out.println("4. Low Stock Products");
+            System.out.println("5. Generate Bill");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice: ");
+            int ch = sc.nextInt();
+
+            if (ch == 1) {
+                System.out.print("ID: ");
+                int id = sc.nextInt();
+                System.out.print("Name: ");
+                String name = sc.next();
+                System.out.print("Price: ");
+                double price = sc.nextDouble();
+                System.out.print("Quantity: ");
+                int qty = sc.nextInt();
+
+                p[count++] = new Product(id, name, price, qty);
+            }
+            else if (ch == 2) {
+                System.out.print("Enter Product ID: ");
+                int id = sc.nextInt();
+
+                for (int i = 0; i < count; i++) {
+                    if (p[i].productId == id) {
+                        System.out.print("Enter new quantity: ");
+                        p[i].quantity = sc.nextInt();
+                    }
+                }
+            }
+            else if (ch == 3) {
+                for (int i = 0; i < count - 1; i++) {
+                    for (int j = 0; j < count - i - 1; j++) {
+                        if (p[j].price < p[j + 1].price) {
+                            Product temp = p[j];
+                            p[j] = p[j + 1];
+                            p[j + 1] = temp;
+                        }
+                    }
+                }
+                System.out.println("Sorted Products:");
+                for (int i = 0; i < count; i++)
+                    p[i].show();
+            }
+            else if (ch == 4) {
+                System.out.println("Low Stock Products (<5):");
+                for (int i = 0; i < count; i++) {
+                    if (p[i].quantity < 5)
+                        p[i].show();
+                }
+            }
+            else if (ch == 5) {
+                System.out.print("Enter Product ID: ");
+                int id = sc.nextInt();
+                System.out.print("Enter Buy Quantity: ");
+                int buyQty = sc.nextInt();
+
+                for (int i = 0; i < count; i++) {
+                    if (p[i].productId == id) {
+                        if (p[i].quantity > 0 && buyQty <= p[i].quantity) {
+                            double total = buyQty * p[i].price;
+                            p[i].quantity -= buyQty;
+                            System.out.println("Bill Amount: " + total);
+                        } else {
+                            System.out.println("Not enough stock!");
+                        }
+                    }
+                }
+            }
+            else if (ch == 6) {
+                break;
+            }
+        }
+    }
+}
+
+
+Q18. Create a Student class with constructor :
+roll
+name
+attendance (out of 100)
+marks of 5 subjects
+Menu options:
+Add student
+Calculate final result:
+Avg ≥ 60 AND attendance ≥ 75 → Pass
+Else → Fail
+Display students with “Short Attendance” (attendance < 60)
+Highest and lowest scoring student
+Show student rank list (sort by average)
+Store marks inside an integer array.
+Multi-condition pass/fail logic using &&.
+Ranking requires sorting objects manually.
+Attendance + result decision in combination.
+
+import java.util.*;
+
+class Student {
+    int roll;
+    String name;
+    int attendance;
+    int marks[] = new int[5];
+
+    Student(int roll, String name, int attendance, int[] marks) {
+        this.roll = roll;
+        this.name = name;
+        this.attendance = attendance;
+        for (int i = 0; i < 5; i++)
+            this.marks[i] = marks[i];
+    }
+
+    double getAverage() {
+        int sum = 0;
+        for (int m : marks) sum += m;
+        return sum / 5.0;
+    }
+
+    String getResult() {
+        double avg = getAverage();
+        if (avg >= 60 && attendance >= 75)
+            return "Pass";
+        else
+            return "Fail";
+    }
+
+    void show() {
+        System.out.println(roll + "  " + name + "  Avg: " + getAverage() + "  Attendance: " + attendance + "  Result: " + getResult());
+    }
+}
+
+public class Q18Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Student stu[] = new Student[20];
+        int count = 0;
+
+        while (true) {
+            System.out.println("\n1. Add Student");
+            System.out.println("2. Show Short Attendance (<60)");
+            System.out.println("3. Highest & Lowest Scoring");
+            System.out.println("4. Rank List (Sort by Average)");
+            System.out.println("5. Exit");
+            System.out.print("Enter choice: ");
+            int ch = sc.nextInt();
+
+            if (ch == 1) {
+                System.out.print("Roll: ");
+                int roll = sc.nextInt();
+                System.out.print("Name: ");
+                String name = sc.next();
+                System.out.print("Attendance: ");
+                int att = sc.nextInt();
+
+                int marks[] = new int[5];
+                System.out.println("Enter 5 subject marks:");
+                for (int i = 0; i < 5; i++)
+                    marks[i] = sc.nextInt();
+
+                stu[count++] = new Student(roll, name, att, marks);
+            }
+            else if (ch == 2) {
+                System.out.println("Short Attendance Students:");
+                for (int i = 0; i < count; i++) {
+                    if (stu[i].attendance < 60)
+                        stu[i].show();
+                }
+            }
+            else if (ch == 3) {
+                Student high = stu[0], low = stu[0];
+
+                for (int i = 1; i < count; i++) {
+                    if (stu[i].getAverage() > high.getAverage())
+                        high = stu[i];
+                    if (stu[i].getAverage() < low.getAverage())
+                        low = stu[i];
+                }
+
+                System.out.println("Highest Scoring:");
+                high.show();
+                System.out.println("Lowest Scoring:");
+                low.show();
+            }
+            else if (ch == 4) {
+                for (int i = 0; i < count - 1; i++) {
+                    for (int j = 0; j < count - i - 1; j++) {
+                        if (stu[j].getAverage() < stu[j + 1].getAverage()) {
+                            Student temp = stu[j];
+                            stu[j] = stu[j + 1];
+                            stu[j + 1] = temp;
+                        }
+                    }
+                }
+
+                System.out.println("Rank List:");
+                for (int i = 0; i < count; i++)
+                    stu[i].show();
+            }
+            else if (ch == 5) break;
+        }
+    }
+}
+
+
+Q19. Create a DeliveryOrder class with constructor:
+orderId
+customerName
+distanceInKm
+timeSlot (Morning, Afternoon, Night)
+Menu options:
+Add delivery order
+Calculate delivery charges:
+Base charge = ₹50
+Distance charge = ₹10 per km
+Time slot charges:
+Night → additional ₹40
+Morning / Afternoon → ₹0
+Show “Priority Orders” (distance > 15 km OR timeSlot = Night)
+Display order with highest delivery charge
+Sort orders by distance (high → low)
+Use logical operators to detect priority:
+Manual sorting using loops.
+Multi-step charge calculation.
+
+
+import java.util.*;
+
+class DeliveryOrder {
+    int orderId;
+    String customerName;
+    int distanceInKm;
+    String timeSlot;
+
+    DeliveryOrder(int orderId, String customerName, int distanceInKm, String timeSlot) {
+        this.orderId = orderId;
+        this.customerName = customerName;
+        this.distanceInKm = distanceInKm;
+        this.timeSlot = timeSlot;
+    }
+
+    double getCharge() {
+        double base = 50;
+        double distanceCharge = distanceInKm * 10;
+        double timeCharge = 0;
+
+        if (timeSlot.equalsIgnoreCase("Night"))
+            timeCharge = 40;
+
+        return base + distanceCharge + timeCharge;
+    }
+
+    boolean isPriority() {
+        return distanceInKm > 15 || timeSlot.equalsIgnoreCase("Night");
+    }
+
+    void show() {
+        System.out.println(orderId + "  " + customerName + "  Distance: " + distanceInKm +
+                "  Slot: " + timeSlot + "  Charge: " + getCharge());
+    }
+}
+
+public class Q19Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        DeliveryOrder d[] = new DeliveryOrder[20];
+        int count = 0;
+
+        while (true) {
+            System.out.println("\n1. Add Order");
+            System.out.println("2. Show Priority Orders");
+            System.out.println("3. Highest Delivery Charge");
+            System.out.println("4. Sort by Distance (High → Low)");
+            System.out.println("5. Exit");
+            System.out.print("Enter choice: ");
+            int ch = sc.nextInt();
+
+            if (ch == 1) {
+                System.out.print("Order ID: ");
+                int id = sc.nextInt();
+                System.out.print("Customer Name: ");
+                String name = sc.next();
+                System.out.print("Distance: ");
+                int dist = sc.nextInt();
+                System.out.print("Time Slot: ");
+                String slot = sc.next();
+
+                d[count++] = new DeliveryOrder(id, name, dist, slot);
+            }
+            else if (ch == 2) {
+                System.out.println("Priority Orders:");
+                for (int i = 0; i < count; i++)
+                    if (d[i].isPriority()) d[i].show();
+            }
+            else if (ch == 3) {
+                DeliveryOrder max = d[0];
+                for (int i = 1; i < count; i++)
+                    if (d[i].getCharge() > max.getCharge())
+                        max = d[i];
+
+                System.out.println("Highest Charge Order:");
+                max.show();
+            }
+            else if (ch == 4) {
+                for (int i = 0; i < count - 1; i++) {
+                    for (int j = 0; j < count - i - 1; j++) {
+                        if (d[j].distanceInKm < d[j + 1].distanceInKm) {
+                            DeliveryOrder temp = d[j];
+                            d[j] = d[j + 1];
+                            d[j + 1] = temp;
+                        }
+                    }
+                }
+
+                System.out.println("Sorted Orders:");
+                for (int i = 0; i < count; i++)
+                    d[i].show();
+            }
+            else if (ch == 5) break;
+        }
+    }
+}
+
+
+
+Q20. Create a Franchise class with constructor:
+franchiseId
+ownerName
+monthlySales
+city
+targetSales
+Menu options:
+Register franchise
+Calculate monthly incentive:
+If sales ≥ target → 10% incentive
+If sales ≥ 2 × target → 25% incentive
+If sales < target → NO incentive
+Display underperforming franchises (sales < 0.7 × target)
+Find franchise with highest incentive
+Display franchises city-wise (filter by a given city)
+Multi-level incentive logic with nested conditions.
+Underperformance check using :
+ if(sales < (0.7 * targetSales))
+Highest incentive requires comparing across all objects.
+City filtering requires string matching.
+Constructor initializes all values; program uses arrays.
+
+import java.util.*;
+
+class Franchise {
+    int franchiseId;
+    String ownerName;
+    double monthlySales;
+    String city;
+    double targetSales;
+
+    Franchise(int franchiseId, String ownerName, double monthlySales, String city, double targetSales) {
+        this.franchiseId = franchiseId;
+        this.ownerName = ownerName;
+        this.monthlySales = monthlySales;
+        this.city = city;
+        this.targetSales = targetSales;
+    }
+
+    double getIncentive() {
+        if (monthlySales >= 2 * targetSales)
+            return 0.25 * monthlySales;
+        else if (monthlySales >= targetSales)
+            return 0.10 * monthlySales;
+        else
+            return 0;
+    }
+
+    boolean isUnderperforming() {
+        return monthlySales < (0.7 * targetSales);
+    }
+
+    void show() {
+        System.out.println(franchiseId + "  " + ownerName + "  City: " + city +
+                "  Sales: " + monthlySales + "  Incentive: " + getIncentive());
+    }
+}
+
+public class Q20Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Franchise f[] = new Franchise[20];
+        int count = 0;
+
+        while (true) {
+            System.out.println("\n1. Register Franchise");
+            System.out.println("2. Underperforming Franchises");
+            System.out.println("3. Highest Incentive");
+            System.out.println("4. Display by City");
+            System.out.println("5. Exit");
+            System.out.print("Enter choice: ");
+            int ch = sc.nextInt();
+
+            if (ch == 1) {
+                System.out.print("ID: ");
+                int id = sc.nextInt();
+                System.out.print("Owner: ");
+                String owner = sc.next();
+                System.out.print("Sales: ");
+                double sales = sc.nextDouble();
+                System.out.print("City: ");
+                String city = sc.next();
+                System.out.print("Target: ");
+                double target = sc.nextDouble();
+
+                f[count++] = new Franchise(id, owner, sales, city, target);
+            }
+            else if (ch == 2) {
+                System.out.println("Underperforming:");
+                for (int i = 0; i < count; i++)
+                    if (f[i].isUnderperforming()) f[i].show();
+            }
+            else if (ch == 3) {
+                Franchise max = f[0];
+                for (int i = 1; i < count; i++)
+                    if (f[i].getIncentive() > max.getIncentive())
+                        max = f[i];
+
+                System.out.println("Highest Incentive:");
+                max.show();
+            }
+            else if (ch == 4) {
+                System.out.print("Enter City: ");
+                String city = sc.next();
+
+                for (int i = 0; i < count; i++)
+                    if (f[i].city.equalsIgnoreCase(city))
+                        f[i].show();
+            }
+            else if (ch == 5) break;
+        }
+    }
+}
+
+
+Q1. A shop gives a discount of 12% if a customer buys more than 50 units of a product.
+Create class ProductOrder with:
+customerId, customerName, productName, quantity, pricePerUnit, discountAmount, finalAmount
+Set data through parameterized constructor
+Create showBill() method to display all details.
+Create class DiscountManager with:
+Method setOrders(ProductOrder order[])
+Method calculateDiscount()
+
+class ProductOrder {
+    int customerId;
+    String customerName;
+    String productName;
+    int quantity;
+    double pricePerUnit;
+    double discountAmount;
+    double finalAmount;
+
+    ProductOrder(int customerId, String customerName, String productName,
+                 int quantity, double pricePerUnit) {
+
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.pricePerUnit = pricePerUnit;
+    }
+
+    void showBill() {
+        System.out.println("Customer ID: " + customerId);
+        System.out.println("Name: " + customerName);
+        System.out.println("Product: " + productName);
+        System.out.println("Quantity: " + quantity);
+        System.out.println("Price/Unit: " + pricePerUnit);
+        System.out.println("Discount: " + discountAmount);
+        System.out.println("Final Amount: " + finalAmount);
+        System.out.println("--------------------------------");
+    }
+}
+
+class DiscountManager {
+    ProductOrder orders[];
+
+    void setOrders(ProductOrder orders[]) {
+        this.orders = orders;
+    }
+
+    void calculateDiscount() {
+        for (ProductOrder o : orders) {
+            double total = o.quantity * o.pricePerUnit;
+
+            if (o.quantity > 50)
+                o.discountAmount = 0.12 * total;
+            else
+                o.discountAmount = 0;
+
+            o.finalAmount = total - o.discountAmount;
+        }
+    }
+}
+
+public class Q1Main {
+    public static void main(String[] args) {
+        ProductOrder arr[] = {
+                new ProductOrder(1, "Arati", "Pen", 60, 10),
+                new ProductOrder(2, "Rohan", "Book", 30, 50)
+        };
+
+        DiscountManager dm = new DiscountManager();
+        dm.setOrders(arr);
+        dm.calculateDiscount();
+
+        for (ProductOrder o : arr)
+            o.showBill();
+    }
+}
+
+
+Q2. Write a java Program to calculate overtime pay of 5 employees. The overtime pay rate is Rs.50/- (per Hour). Daily shift hour time is only 8 hours. 
+	Note- for a week only 40 hours of working are allowed.
+	1. Create class Employee with data member ID, Name, total working, salary, overtime
+Set Information by using a parameterized constructor and create a display Information() method to display all information with salary.
+2. Create another class name as OverTime with method setEmployee(Employee emp[ ]) and  void calculateOvertime() to calculate overtime. 
+
+class Employee {
+    int id;
+    String name;
+    int totalWorkingHours;
+    double salary;
+    int overtimeHours;
+
+    Employee(int id, String name, int totalWorkingHours) {
+        this.id = id;
+        this.name = name;
+        this.totalWorkingHours = totalWorkingHours;
+    }
+
+    void displayInformation() {
+        System.out.println(id + "  " + name + "  Working: " + totalWorkingHours +
+                "  Overtime: " + overtimeHours + "  Salary: " + salary);
+    }
+}
+
+class OverTime {
+    Employee emp[];
+
+    void setEmployee(Employee emp[]) {
+        this.emp = emp;
+    }
+
+    void calculateOvertime() {
+        for (Employee e : emp) {
+            int weeklyLimit = 40;
+            int overtimeRate = 50;
+
+            if (e.totalWorkingHours > weeklyLimit)
+                e.overtimeHours = e.totalWorkingHours - weeklyLimit;
+            else
+                e.overtimeHours = 0;
+
+            e.salary = e.overtimeHours * overtimeRate;
+        }
+    }
+}
+
+public class Q2Main {
+    public static void main(String[] args) {
+        Employee arr[] = {
+                new Employee(1, "Arati", 45),
+                new Employee(2, "Rohan", 38),
+                new Employee(3, "Neha", 50),
+                new Employee(4, "Amit", 42),
+                new Employee(5, "Sara", 60)
+        };
+
+        OverTime ot = new OverTime();
+        ot.setEmployee(arr);
+        ot.calculateOvertime();
+
+        for (Employee e : arr)
+            e.displayInformation();
+    }
+}
+
+
+Q3. A taxi charges Rs. 15 per km.
+ If the distance exceeds 100 km, then additional 5% surcharge is added on total cost.
+Create class TaxiRide with:
+rideId, customerName, distance, totalFare, surcharge
+Use parameterized constructor
+Method displayRide()
+Create class FareManager with:
+Method setRides(TaxiRide ride[])
+Method calculateFare()
+
+class TaxiRide {
+    int rideId;
+    String customerName;
+    int distance;
+    double totalFare;
+    double surcharge;
+
+    TaxiRide(int rideId, String customerName, int distance) {
+        this.rideId = rideId;
+        this.customerName = customerName;
+        this.distance = distance;
+    }
+
+    void displayRide() {
+        System.out.println("Ride ID: " + rideId);
+        System.out.println("Name: " + customerName);
+        System.out.println("Distance: " + distance);
+        System.out.println("Surcharge: " + surcharge);
+        System.out.println("Total Fare: " + totalFare);
+        System.out.println("--------------------------------");
+    }
+}
+
+class FareManager {
+    TaxiRide rides[];
+
+    void setRides(TaxiRide rides[]) {
+        this.rides = rides;
+    }
+
+    void calculateFare() {
+        for (TaxiRide r : rides) {
+            double baseFare = r.distance * 15;
+
+            if (r.distance > 100)
+                r.surcharge = 0.05 * baseFare;
+            else
+                r.surcharge = 0;
+
+            r.totalFare = baseFare + r.surcharge;
+        }
+    }
+}
+
+public class Q3Main {
+    public static void main(String[] args) {
+        TaxiRide arr[] = {
+                new TaxiRide(1, "Arati", 120),
+                new TaxiRide(2, "Rohan", 80)
+        };
+
+        FareManager fm = new FareManager();
+        fm.setRides(arr);
+        fm.calculateFare();
+
+        for (TaxiRide r : arr)
+            r.displayRide();
+    }
+}
+
+
+Q4. School gives a performance score based on attendance:
+If student attendance > 90%, award 10 marks bonus.
+If attendance < 75%, deduct 5 marks.
+Create class Student with:
+rollNo, name, totalLectures, attendedLectures, performanceMarks
+Parameterized constructor
+Method displayStudent()
+Create class AttendanceManager with:
+Method setStudents(Student stu[])
+Method calculatePerformance()
+
+class Student {
+    int rollNo;
+    String name;
+    int totalLectures;
+    int attendedLectures;
+    int performanceMarks;
+
+    Student(int rollNo, String name, int totalLectures, int attendedLectures) {
+        this.rollNo = rollNo;
+        this.name = name;
+        this.totalLectures = totalLectures;
+        this.attendedLectures = attendedLectures;
+    }
+
+    void displayStudent() {
+        System.out.println(rollNo + "  " + name + "  Attendance: " +
+                attendedLectures + "/" + totalLectures + "  Performance: " + performanceMarks);
+    }
+}
+
+class AttendanceManager {
+    Student stu[];
+
+    void setStudents(Student stu[]) {
+        this.stu = stu;
+    }
+
+    void calculatePerformance() {
+        for (Student s : stu) {
+            double attendancePercent = (s.attendedLectures * 100.0) / s.totalLectures;
+
+            if (attendancePercent > 90)
+                s.performanceMarks = 10;
+            else if (attendancePercent < 75)
+                s.performanceMarks = -5;
+            else
+                s.performanceMarks = 0;
+        }
+    }
+}
+
+public class Q4Main {
+    public static void main(String[] args) {
+        Student arr[] = {
+                new Student(1, "Arati", 100, 95),
+                new Student(2, "Rohan", 100, 60),
+                new Student(3, "Neha", 100, 80)
+        };
+
+        AttendanceManager am = new AttendanceManager();
+        am.setStudents(arr);
+        am.calculatePerformance();
+
+        for (Student s : arr)
+            s.displayStudent();
+    }
+}
+
+
+
+Q5. Write a Java Program to manage 5 library members, where each member can borrow multiple books (count only).
+ Rules:
+Charging Rules:
+First 3 books free
+For extra books → ₹25 per book
+If member type = “Premium” → 20% discount on total charges
+If books > 10 → Extra ₹100 handling charge
+Requirements:
+Create class Member with:
+id, name, memberType (Regular/Premium), totalBooks, charge, discount
+Parameterized constructor
+Method showDetails()
+Create class LibraryManager with:
+Method setMembers(Member m[])
+Method calculateCharges()
+
+
+class Member {
+    int id;
+    String name;
+    String memberType;
+    int totalBooks;
+    double charge;
+    double discount;
+
+    Member(int id, String name, String memberType, int totalBooks) {
+        this.id = id;
+        this.name = name;
+        this.memberType = memberType;
+        this.totalBooks = totalBooks;
+    }
+
+    void showDetails() {
+        System.out.println(id + "  " + name + "  Type: " + memberType +
+                "  Books: " + totalBooks + "  Charge: " + charge + "  Discount: " + discount);
+    }
+}
+
+class LibraryManager {
+    Member m[];
+
+    void setMembers(Member m[]) {
+        this.m = m;
+    }
+
+    void calculateCharges() {
+        for (Member mem : m) {
+            int extraBooks = 0;
+
+            if (mem.totalBooks > 3)
+                extraBooks = mem.totalBooks - 3;
+
+            mem.charge = extraBooks * 25;
+
+            if (mem.totalBooks > 10)
+                mem.charge += 100;
+
+            if (mem.memberType.equalsIgnoreCase("Premium"))
+                mem.discount = 0.20 * mem.charge;
+            else
+                mem.discount = 0;
+
+            mem.charge -= mem.discount;
+        }
+    }
+}
+
+public class Q5Main {
+    public static void main(String[] args) {
+        Member arr[] = {
+                new Member(1, "Arati", "Premium", 12),
+                new Member(2, "Rohan", "Regular", 5),
+                new Member(3, "Neha", "Premium", 3)
+        };
+
+        LibraryManager lm = new LibraryManager();
+        lm.setMembers(arr);
+        lm.calculateCharges();
+
+        for (Member m : arr)
+            m.showDetails();
+    }
+}

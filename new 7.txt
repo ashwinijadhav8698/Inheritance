@@ -1,0 +1,38 @@
+/*Q1. Employee Salary System
+Concepts Used: Abstract class, method overriding, logic
+ Operations to Perform:
+Create an abstract class Employee
+Fields: empId, name, basicSalary
+Abstract method: calculateSalary()
+Create two subclasses:
+
+
+PermanentEmployee (HRA 20%, DA 10%)
+ContractEmployee (HRA 10%, DA 5%)
+
+
+Calculate total salary
+Display employee details
+
+
+Logic Focus:
+ Different salary calculation logic using inheritance.
+Explanation:
+ Abstract class forces subclasses to implement salary logic differently.
+*/
+
+abstract class Employee
+{
+  int empid;
+  String name;
+  double basSal;
+  abstract calculateSalary();
+}
+ class PermanentEmployee
+{
+
+}
+class ContractEmployee
+{
+
+}
